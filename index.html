@@ -1,282 +1,139 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Parada do Frio na Estrada</title>
 
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial, sans-serif;
-}
-
-body{
-background:#0f1115;
-color:white;
-padding-bottom:100px;
-}
-
-.topo{
-background:linear-gradient(180deg,#1b1f27,#11141a);
-padding:25px;
-border-bottom-left-radius:30px;
-border-bottom-right-radius:30px;
-box-shadow:0 5px 20px rgba(0,0,0,0.4);
-}
-
-.logo{
-font-size:28px;
-font-weight:bold;
-color:#ff7b00;
-}
-
-.sub{
-margin-top:5px;
-color:#aaa;
-font-size:14px;
-}
-
-.clima-box{
-margin-top:25px;
-background:#1c212b;
-padding:20px;
-border-radius:20px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.temp{
-font-size:48px;
-font-weight:bold;
-color:#ff7b00;
-}
-
-.sensacao{
-font-size:14px;
-color:#bbb;
-margin-top:5px;
-}
-
-.cidade{
-text-align:right;
-}
-
-.mapa{
-margin:20px;
-height:220px;
-background:#1c212b;
-border-radius:25px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:20px;
-color:#666;
-border:2px dashed #333;
-}
-
-.cards{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:15px;
-padding:20px;
-}
-
-.card{
-background:#1c212b;
-padding:20px;
-border-radius:22px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,0.3);
-transition:0.3s;
-}
-
-.card:hover{
-transform:scale(1.03);
-}
-
-.icon{
-font-size:35px;
-margin-bottom:10px;
-}
-
-.titulo{
-font-size:16px;
-font-weight:bold;
-}
-
-.desc{
-margin-top:5px;
-font-size:13px;
-color:#aaa;
-}
-
-.alerta{
-margin:20px;
-background:#ff7b00;
-padding:18px;
-border-radius:20px;
-font-weight:bold;
-color:#111;
-text-align:center;
-}
-
-.bottom{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:#161a22;
-display:flex;
-justify-content:space-around;
-padding:15px 0;
-border-top:1px solid #333;
-}
-
-.bottom button{
-background:none;
-border:none;
-color:#ff7b00;
-font-size:14px;
-font-weight:bold;
-}
-
-.botao-whats{
-margin:20px;
-}
-
-.botao-whats button{
-width:100%;
-padding:18px;
-border:none;
-border-radius:20px;
-background:#25D366;
-color:white;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-}
-
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
+body{background:#0f1115;color:white;padding-bottom:95px}
+.topo{background:linear-gradient(180deg,#1b1f27,#11141a);padding:22px;border-bottom-left-radius:28px;border-bottom-right-radius:28px}
+.logo{font-size:24px;font-weight:900;color:#ff7b00}
+.sub{color:#aaa;font-size:14px;margin-top:6px}
+.form{margin-top:20px;display:grid;gap:10px}
+input{width:100%;padding:15px;border-radius:16px;border:1px solid #333;background:#1c212b;color:white;font-size:16px}
+button{border:none;border-radius:16px;padding:15px;font-weight:800;cursor:pointer}
+.btn-rota{background:#ff7b00;color:#111;font-size:16px}
+.painel{margin:18px;background:#1c212b;border-radius:24px;padding:20px;display:flex;justify-content:space-between;align-items:center}
+.temp{font-size:44px;font-weight:900;color:#ff7b00}
+.info{text-align:right;font-size:15px}
+.mapa{margin:18px;border-radius:24px;overflow:hidden;border:2px solid #2b303b;height:330px;background:#1c212b}
+iframe{width:100%;height:100%;border:0}
+.alerta{margin:18px;background:#ff7b00;color:#111;padding:16px;border-radius:18px;text-align:center;font-weight:900}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px}
+.card{background:#1c212b;border-radius:22px;padding:20px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.25)}
+.icon{font-size:32px;margin-bottom:8px}
+.card b{color:#fff}
+.card p{color:#aaa;font-size:13px;margin-top:6px}
+.whats{padding:18px}
+.whats button{width:100%;background:#25D366;color:white;font-size:17px}
+.bottom{position:fixed;bottom:0;left:0;width:100%;background:#161a22;border-top:1px solid #333;display:flex;justify-content:space-around;padding:14px 0}
+.bottom span{color:#ff7b00;font-size:13px;font-weight:800}
 </style>
-
 </head>
 
 <body>
 
 <div class="topo">
+  <div class="logo">🚛 Parada do Frio na Estrada</div>
+  <div class="sub">Tudo que o caminhoneiro precisa no trecho.</div>
 
-<div class="logo">
-🚛 Parada do Frio na Estrada
+  <div class="form">
+    <input id="origem" placeholder="Cidade de origem. Ex: Montes Claros MG">
+    <input id="destino" placeholder="Destino. Ex: São Paulo SP">
+    <button class="btn-rota" onclick="gerarRota()">Atualizar rota</button>
+  </div>
 </div>
 
-<div class="sub">
-Tudo que o caminhoneiro precisa no trecho.
-</div>
-
-<div class="clima-box">
-
-<div>
-<div class="temp" id="temperatura">
-34°
-</div>
-
-<div class="sensacao">
-Sensação térmica de 41°
-</div>
-</div>
-
-<div class="cidade">
-📍 Goiânia - GO<br>
-☀️ Muito quente
-</div>
-
-</div>
-
+<div class="painel">
+  <div>
+    <div class="temp">34°</div>
+    <div>Sensação térmica 41°</div>
+  </div>
+  <div class="info">
+    📍 Trecho atual<br>
+    ☀️ Muito quente<br>
+    ⚠️ Atenção ao calor
+  </div>
 </div>
 
 <div class="mapa">
-🗺️ MAPA DA ROTA
+  <iframe id="mapa" src="https://www.google.com/maps?q=Goiânia%20GO&output=embed"></iframe>
 </div>
 
 <div class="alerta">
-⚠️ Trecho com calor extremo nas próximas 3 horas
+  ⚠️ Verifique o clima e pontos de parada antes de seguir viagem
 </div>
 
 <div class="cards">
+  <div class="card" onclick="buscar('postos')">
+    <div class="icon">⛽</div>
+    <b>Postos</b>
+    <p>Postos próximos na rota</p>
+  </div>
 
-<div class="card">
-<div class="icon">⛽</div>
-<div class="titulo">Postos</div>
-<div class="desc">
-Encontre postos próximos
-</div>
-</div>
+  <div class="card" onclick="buscar('oficinas caminhão')">
+    <div class="icon">🛠️</div>
+    <b>Oficinas</b>
+    <p>Assistência e elétrica</p>
+  </div>
 
-<div class="card">
-<div class="icon">🛠️</div>
-<div class="titulo">Oficinas</div>
-<div class="desc">
-Assistência na estrada
-</div>
-</div>
+  <div class="card" onclick="buscar('hotel posto descanso caminhoneiro')">
+    <div class="icon">🛏️</div>
+    <b>Descanso</b>
+    <p>Pontos para dormir</p>
+  </div>
 
-<div class="card">
-<div class="icon">🛏️</div>
-<div class="titulo">Descanso</div>
-<div class="desc">
-Pontos para parada
-</div>
-</div>
-
-<div class="card">
-<div class="icon">🌡️</div>
-<div class="titulo">Clima</div>
-<div class="desc">
-Veja o clima da rota
-</div>
+  <div class="card" onclick="buscar('restaurante estrada caminhoneiro')">
+    <div class="icon">🍽️</div>
+    <b>Refeição</b>
+    <p>Paradas para comer</p>
+  </div>
 </div>
 
-</div>
-
-<div class="botao-whats">
-
-<button onclick="whatsapp()">
-Falar no WhatsApp
-</button>
-
+<div class="whats">
+  <button onclick="whatsapp()">Falar com a Parada do Frio</button>
 </div>
 
 <div class="bottom">
-
-<button>🏠 Início</button>
-<button>🗺️ Rotas</button>
-<button>🚛 Caminhão</button>
-<button>⚙️ Config</button>
-
+  <span>🏠 Início</span>
+  <span>🗺️ Rotas</span>
+  <span>⛽ Postos</span>
+  <span>⚙️ Menu</span>
 </div>
 
 <script>
+function gerarRota(){
+  let origem = document.getElementById("origem").value;
+  let destino = document.getElementById("destino").value;
 
-function whatsapp(){
+  if(!origem || !destino){
+    alert("Digite a origem e o destino da viagem.");
+    return;
+  }
 
-let numero = "5538998481042";
+  let url = "https://www.google.com/maps/embed/v1/directions?key=&origin=" 
+  + encodeURIComponent(origem) 
+  + "&destination=" 
+  + encodeURIComponent(destino);
 
-let mensagem =
-"Olá! Quero saber mais sobre o app Parada do Frio na Estrada.";
-
-window.open(
-'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem),
-'_blank'
-);
-
+  document.getElementById("mapa").src =
+  "https://www.google.com/maps?q=" + encodeURIComponent(origem + " até " + destino) + "&output=embed";
 }
 
+function buscar(tipo){
+  let origem = document.getElementById("origem").value || "";
+  let destino = document.getElementById("destino").value || "";
+  let pesquisa = tipo + " entre " + origem + " e " + destino;
+  window.open("https://www.google.com/maps/search/" + encodeURIComponent(pesquisa), "_blank");
+}
+
+function whatsapp(){
+  let numero = "5538998481042";
+  let mensagem = "Olá! Quero saber mais sobre a Parada do Frio na Estrada.";
+  window.open("https://wa.me/" + numero + "?text=" + encodeURIComponent(mensagem), "_blank");
+}
 </script>
 
 </body>
