@@ -1,167 +1,281 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Simulador de Economia - Ar Condicionado Elétrico</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body{
-      font-family: Arial, sans-serif;
-      background:#f3f4f6;
-      margin:0;
-      padding:30px;
-      color:#111827;
-    }
+<title>Parada do Frio na Estrada</title>
 
-    .container{
-      max-width:700px;
-      margin:auto;
-      background:white;
-      padding:30px;
-      border-radius:20px;
-      box-shadow:0 5px 20px rgba(0,0,0,0.1);
-    }
+<style>
 
-    h1{
-      text-align:center;
-      margin-bottom:10px;
-      color:#111827;
-    }
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
+}
 
-    p{
-      text-align:center;
-      color:#6b7280;
-    }
+body{
+background:#0f1115;
+color:white;
+padding-bottom:100px;
+}
 
-    .campo{
-      margin-top:20px;
-    }
+.topo{
+background:linear-gradient(180deg,#1b1f27,#11141a);
+padding:25px;
+border-bottom-left-radius:30px;
+border-bottom-right-radius:30px;
+box-shadow:0 5px 20px rgba(0,0,0,0.4);
+}
 
-    label{
-      display:block;
-      margin-bottom:8px;
-      font-weight:bold;
-    }
+.logo{
+font-size:28px;
+font-weight:bold;
+color:#ff7b00;
+}
 
-    input{
-      width:100%;
-      padding:14px;
-      border-radius:12px;
-      border:1px solid #d1d5db;
-      font-size:16px;
-    }
+.sub{
+margin-top:5px;
+color:#aaa;
+font-size:14px;
+}
 
-    .resultado{
-      margin-top:30px;
-      background:#111827;
-      color:white;
-      padding:25px;
-      border-radius:20px;
-      text-align:center;
-    }
+.clima-box{
+margin-top:25px;
+background:#1c212b;
+padding:20px;
+border-radius:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+}
 
-    .valor{
-      font-size:32px;
-      font-weight:bold;
-      margin-top:10px;
-    }
+.temp{
+font-size:48px;
+font-weight:bold;
+color:#ff7b00;
+}
 
-    button{
-      width:100%;
-      margin-top:25px;
-      padding:16px;
-      border:none;
-      border-radius:14px;
-      background:#22c55e;
-      color:white;
-      font-size:18px;
-      font-weight:bold;
-      cursor:pointer;
-    }
+.sensacao{
+font-size:14px;
+color:#bbb;
+margin-top:5px;
+}
 
-    button:hover{
-      opacity:0.9;
-    }
-  </style>
+.cidade{
+text-align:right;
+}
+
+.mapa{
+margin:20px;
+height:220px;
+background:#1c212b;
+border-radius:25px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+color:#666;
+border:2px dashed #333;
+}
+
+.cards{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+padding:20px;
+}
+
+.card{
+background:#1c212b;
+padding:20px;
+border-radius:22px;
+text-align:center;
+box-shadow:0 5px 15px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.03);
+}
+
+.icon{
+font-size:35px;
+margin-bottom:10px;
+}
+
+.titulo{
+font-size:16px;
+font-weight:bold;
+}
+
+.desc{
+margin-top:5px;
+font-size:13px;
+color:#aaa;
+}
+
+.alerta{
+margin:20px;
+background:#ff7b00;
+padding:18px;
+border-radius:20px;
+font-weight:bold;
+color:#111;
+text-align:center;
+}
+
+.bottom{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#161a22;
+display:flex;
+justify-content:space-around;
+padding:15px 0;
+border-top:1px solid #333;
+}
+
+.bottom button{
+background:none;
+border:none;
+color:#ff7b00;
+font-size:14px;
+font-weight:bold;
+}
+
+.botao-whats{
+margin:20px;
+}
+
+.botao-whats button{
+width:100%;
+padding:18px;
+border:none;
+border-radius:20px;
+background:#25D366;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+</style>
+
 </head>
 
 <body>
 
-<div class="container">
+<div class="topo">
 
-  <h1>Simulador de Economia</h1>
+<div class="logo">
+🚛 Parada do Frio na Estrada
+</div>
 
-  <p>Veja quanto você economiza usando ar-condicionado elétrico no caminhão.</p>
+<div class="sub">
+Tudo que o caminhoneiro precisa no trecho.
+</div>
 
-  <div class="campo">
-    <label>Preço do diesel</label>
-    <input type="number" id="diesel" value="6.20">
-  </div>
+<div class="clima-box">
 
-  <div class="campo">
-    <label>Horas parado por noite</label>
-    <input type="number" id="horas" value="8">
-  </div>
+<div>
+<div class="temp" id="temperatura">
+34°
+</div>
 
-  <div class="campo">
-    <label>Dias por mês</label>
-    <input type="number" id="dias" value="22">
-  </div>
+<div class="sensacao">
+Sensação térmica de 41°
+</div>
+</div>
 
-  <div class="campo">
-    <label>Consumo por hora (litros)</label>
-    <input type="number" id="consumo" value="2.5">
-  </div>
+<div class="cidade">
+📍 Goiânia - GO<br>
+☀️ Muito quente
+</div>
 
-  <div class="resultado">
-    <div>Economia estimada por mês</div>
-    <div class="valor" id="resultado">R$ 0,00</div>
-  </div>
+</div>
 
-  <button onclick="whatsapp()">
-    Falar no WhatsApp
-  </button>
+</div>
+
+<div class="mapa">
+🗺️ MAPA DA ROTA
+</div>
+
+<div class="alerta">
+⚠️ Trecho com calor extremo nas próximas 3 horas
+</div>
+
+<div class="cards">
+
+<div class="card">
+<div class="icon">⛽</div>
+<div class="titulo">Postos</div>
+<div class="desc">
+Encontre postos próximos
+</div>
+</div>
+
+<div class="card">
+<div class="icon">🛠️</div>
+<div class="titulo">Oficinas</div>
+<div class="desc">
+Assistência na estrada
+</div>
+</div>
+
+<div class="card">
+<div class="icon">🛏️</div>
+<div class="titulo">Descanso</div>
+<div class="desc">
+Pontos para parada
+</div>
+</div>
+
+<div class="card">
+<div class="icon">🌡️</div>
+<div class="titulo">Clima</div>
+<div class="desc">
+Veja o clima da rota
+</div>
+</div>
+
+</div>
+
+<div class="botao-whats">
+
+<button onclick="whatsapp()">
+Falar no WhatsApp
+</button>
+
+</div>
+
+<div class="bottom">
+
+<button>🏠 Início</button>
+<button>🗺️ Rotas</button>
+<button>🚛 Caminhão</button>
+<button>⚙️ Config</button>
 
 </div>
 
 <script>
 
-function calcular(){
-
-  let diesel = parseFloat(document.getElementById('diesel').value);
-  let horas = parseFloat(document.getElementById('horas').value);
-  let dias = parseFloat(document.getElementById('dias').value);
-  let consumo = parseFloat(document.getElementById('consumo').value);
-
-  let economia = diesel * horas * dias * consumo;
-
-  document.getElementById('resultado').innerHTML =
-    'R$ ' + economia.toFixed(2);
-
-}
-
 function whatsapp(){
 
-  let valor = document.getElementById('resultado').innerText;
+let numero = "5538998481042";
 
-  let mensagem =
-  'Olá! Fiz a simulação e minha economia estimada é de ' + valor;
+let mensagem =
+"Olá! Quero saber mais sobre o app Parada do Frio na Estrada.";
 
-  let numero = '5538998481042';
-
-  window.open(
-    'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem),
-    '_blank'
-  );
+window.open(
+'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem),
+'_blank'
+);
 
 }
-
-document.querySelectorAll('input').forEach(input=>{
-  input.addEventListener('input', calcular);
-});
-
-calcular();
 
 </script>
 
