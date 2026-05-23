@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -24,7 +25,6 @@ iframe{width:100%;height:100%;border:0}
 .cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;padding:18px}
 .card{background:#1c212b;border-radius:22px;padding:20px;text-align:center;box-shadow:0 8px 20px rgba(0,0,0,.25)}
 .icon{font-size:32px;margin-bottom:8px}
-.card b{color:#fff}
 .card p{color:#aaa;font-size:13px;margin-top:6px}
 .whats{padding:18px}
 .whats button{width:100%;background:#25D366;color:white;font-size:17px}
@@ -41,7 +41,7 @@ iframe{width:100%;height:100%;border:0}
 
   <div class="form">
     <input id="origem" placeholder="Cidade de origem. Ex: Montes Claros MG">
-    <input id="destino" placeholder="Destino. Ex: São Paulo SP">
+    <input id="destino" placeholder="Destino. Ex: Ilhéus BA">
     <button class="btn-rota" onclick="gerarRota()">Atualizar rota</button>
   </div>
 </div>
@@ -49,20 +49,20 @@ iframe{width:100%;height:100%;border:0}
 <div class="painel">
   <div>
     <div class="temp" id="temperatura">--°</div>
-    <div class="temp" id="temperatura">--°</div>
+    <div id="sensacao">Digite a origem e atualize a rota</div>
   </div>
-  <div class="info">
+  <div class="info" id="infoClima">
     📍 Trecho atual<br>
-    ☀️ Muito quente<br>
-    ⚠️ Atenção ao calor
+    🌡️ Clima da origem<br>
+    ⚠️ Atenção ao trecho
   </div>
 </div>
 
 <div class="mapa">
-  <iframe id="mapa" src="https://www.google.com/maps?q=Goiânia%20GO&output=embed"></iframe>
+  <iframe id="mapa" src="https://www.google.com/maps?q=Montes%20Claros%20MG&output=embed"></iframe>
 </div>
 
-<div class="alerta">
+<div class="alerta" id="alerta">
   ⚠️ Verifique o clima e pontos de parada antes de seguir viagem
 </div>
 
@@ -104,6 +104,50 @@ iframe{width:100%;height:100%;border:0}
 </div>
 
 <script>
+const apiKey = "5d611db725a75e63fc157ab4b33b7798";
+
+async function carregarClima(cidade){
+  try{
+    const resposta = await fetch(
+      "https://api.openweathermap.org/data/2.5/weather?q=" +
+      encodeURIComponent(cidade) +
+      "&appid=" + apiKey +
+      "&units=metric&lang=pt_br"
+    );
+
+    const dados = await resposta.json();
+
+    if(dados.cod != 200){
+      document.getElementById("temperatura").innerHTML = "--°";
+      document.getElementById("sensacao").innerHTML = "Cidade não encontrada";
+      return;
+    }
+
+    const temp = Math.round(dados.main.temp);
+    const sensacao = Math.round(dados.main.feels_like);
+    const descricao = dados.weather[0].description;
+
+    document.getElementById("temperatura").innerHTML = temp + "°";
+    document.getElementById("sensacao").innerHTML = "Sensação térmica de " + sensacao + "°";
+
+    document.getElementById("infoClima").innerHTML =
+      "📍 " + dados.name + "<br>" +
+      "🌡️ " + descricao + "<br>" +
+      "💧 Umidade: " + dados.main.humidity + "%";
+
+    if(sensacao >= 38){
+      document.getElementById("alerta").innerHTML =
+      "🔥 Alerta: sensação térmica alta. Planeje paradas e hidratação.";
+    } else {
+      document.getElementById("alerta").innerHTML =
+      "✅ Clima dentro do normal para seguir viagem.";
+    }
+
+  }catch(erro){
+    document.getElementById("sensacao").innerHTML = "Erro ao carregar clima";
+  }
+}
+
 function gerarRota(){
   let origem = document.getElementById("origem").value;
   let destino = document.getElementById("destino").value;
@@ -113,13 +157,12 @@ function gerarRota(){
     return;
   }
 
-  let url = "https://www.google.com/maps/embed/v1/directions?key=&origin=" 
-  + encodeURIComponent(origem) 
-  + "&destination=" 
-  + encodeURIComponent(destino);
-
   document.getElementById("mapa").src =
-  "https://www.google.com/maps?q=" + encodeURIComponent(origem + " até " + destino) + "&output=embed";
+  "https://www.google.com/maps?q=" +
+  encodeURIComponent(origem + " até " + destino) +
+  "&output=embed";
+
+  carregarClima(origem);
 }
 
 function buscar(tipo){
