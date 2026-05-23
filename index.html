@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simulador de Economia - Ar Condicionado Elétrico</title>
+
+  <style>
+    body{
+      font-family: Arial, sans-serif;
+      background:#f3f4f6;
+      margin:0;
+      padding:30px;
+      color:#111827;
+    }
+
+    .container{
+      max-width:700px;
+      margin:auto;
+      background:white;
+      padding:30px;
+      border-radius:20px;
+      box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    }
+
+    h1{
+      text-align:center;
+      margin-bottom:10px;
+      color:#111827;
+    }
+
+    p{
+      text-align:center;
+      color:#6b7280;
+    }
+
+    .campo{
+      margin-top:20px;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      font-weight:bold;
+    }
+
+    input{
+      width:100%;
+      padding:14px;
+      border-radius:12px;
+      border:1px solid #d1d5db;
+      font-size:16px;
+    }
+
+    .resultado{
+      margin-top:30px;
+      background:#111827;
+      color:white;
+      padding:25px;
+      border-radius:20px;
+      text-align:center;
+    }
+
+    .valor{
+      font-size:32px;
+      font-weight:bold;
+      margin-top:10px;
+    }
+
+    button{
+      width:100%;
+      margin-top:25px;
+      padding:16px;
+      border:none;
+      border-radius:14px;
+      background:#22c55e;
+      color:white;
+      font-size:18px;
+      font-weight:bold;
+      cursor:pointer;
+    }
+
+    button:hover{
+      opacity:0.9;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>Simulador de Economia</h1>
+
+  <p>Veja quanto você economiza usando ar-condicionado elétrico no caminhão.</p>
+
+  <div class="campo">
+    <label>Preço do diesel</label>
+    <input type="number" id="diesel" value="6.20">
+  </div>
+
+  <div class="campo">
+    <label>Horas parado por noite</label>
+    <input type="number" id="horas" value="8">
+  </div>
+
+  <div class="campo">
+    <label>Dias por mês</label>
+    <input type="number" id="dias" value="22">
+  </div>
+
+  <div class="campo">
+    <label>Consumo por hora (litros)</label>
+    <input type="number" id="consumo" value="2.5">
+  </div>
+
+  <div class="resultado">
+    <div>Economia estimada por mês</div>
+    <div class="valor" id="resultado">R$ 0,00</div>
+  </div>
+
+  <button onclick="whatsapp()">
+    Falar no WhatsApp
+  </button>
+
+</div>
+
+<script>
+
+function calcular(){
+
+  let diesel = parseFloat(document.getElementById('diesel').value);
+  let horas = parseFloat(document.getElementById('horas').value);
+  let dias = parseFloat(document.getElementById('dias').value);
+  let consumo = parseFloat(document.getElementById('consumo').value);
+
+  let economia = diesel * horas * dias * consumo;
+
+  document.getElementById('resultado').innerHTML =
+    'R$ ' + economia.toFixed(2);
+
+}
+
+function whatsapp(){
+
+  let valor = document.getElementById('resultado').innerText;
+
+  let mensagem =
+  'Olá! Fiz a simulação e minha economia estimada é de ' + valor;
+
+  let numero = '5538998481042';
+
+  window.open(
+    'https://wa.me/' + numero + '?text=' + encodeURIComponent(mensagem),
+    '_blank'
+  );
+
+}
+
+document.querySelectorAll('input').forEach(input=>{
+  input.addEventListener('input', calcular);
+});
+
+calcular();
+
+</script>
+
+</body>
+</html>
