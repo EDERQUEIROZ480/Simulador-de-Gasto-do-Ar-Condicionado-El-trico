@@ -1,0 +1,1 @@
+# Simulador-de-Gasto-do-Ar-Condicionado-El-trico
